@@ -5,6 +5,11 @@ using UnityEngine;
 
 namespace Corpus.Physics
 {
+    public class ProbeResult
+    {
+        public Vector3 Normal;
+    }
+    
     public class PhysicsService
     {
         public const float TERMINAL_VELOCITY = -90.0f; // m/s
@@ -44,13 +49,24 @@ namespace Corpus.Physics
             ProbeGround(_displacement);
         }
         
-        public bool ProbeCollisions(Vector3 worldDirection)
+        public bool ProbeCollisions(Vector3 worldDirection, out ProbeResult result)
         {
             var feetOrigin = GetFeetOrigin();
             var headOrigin = GetHeadOrigin();
+
+            if (UnityEngine.Physics.CapsuleCast(feetOrigin, headOrigin, _settings.GroundCheckRadius,
+                    worldDirection.normalized, out var hit, worldDirection.magnitude, _settings.CollisionLayerMask))
+            {
+                result = new()
+                {
+                    Normal = hit.normal
+                };
+                
+                return true;
+            }
             
-            var result = UnityEngine.Physics.CapsuleCast(feetOrigin, headOrigin, _settings.GroundCheckRadius, worldDirection.normalized, worldDirection.magnitude, _settings.GroundLayerMask);
-            return result;
+            result = null;
+            return false;
         }
         
         private void PreProbeGround()

@@ -18,6 +18,9 @@ namespace Corpus.Physics
         private LayerMask _groundLayerMask;
         
         [SerializeField]
+        private LayerMask _collisionLayerMask;
+        
+        [SerializeField]
         private float _groundCheckRadius;
         
         [SerializeField]
@@ -32,6 +35,7 @@ namespace Corpus.Physics
         public BoneDefinition FeetBoneDefinition => _feetBoneDefinition;
         public BoneDefinition HeadBoneDefinition => _headBoneDefinition;
         public LayerMask GroundLayerMask => _groundLayerMask;
+        public LayerMask CollisionLayerMask => _collisionLayerMask;
         public float GroundCheckRadius => _groundCheckRadius;
         public Vector3 GroundCheckOffset => _groundCheckOffset;
         public float GroundSkinWidth => _groundSkinWidth;
