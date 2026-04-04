@@ -1,4 +1,6 @@
 using System;
+using Corpus.Motor;
+using Corpus.Physics;
 using Corpus.Skeleton;
 using UnityEngine;
 
@@ -51,12 +53,24 @@ namespace Corpus.Core
 
         public void Update()
         {
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+            {
+                return;
+            }
+#endif
             var deltaTime = Time.deltaTime;
             
         }
 
         public void FixedUpdate()
         {
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
+            {
+                return;
+            }
+#endif
             var deltaTime = Time.fixedDeltaTime;
             
             _physicsService.FixedTick(deltaTime);
@@ -73,7 +87,9 @@ namespace Corpus.Core
             }
             
             _skeletonService = new(_skeletonSettings);
+            _inputService = new(_inputSettings, new InputReader());
             _physicsService = new(_physicsSettings, _skeletonService);
+            _motorService = new(_motorSettings, _physicsService);
         }
 
         public void OnDrawGizmos()
