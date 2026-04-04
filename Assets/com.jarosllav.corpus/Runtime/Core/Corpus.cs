@@ -15,6 +15,9 @@ namespace Corpus.Core
         [SerializeField]
         private PhysicsSettings _physicsSettings;
 
+        [SerializeField]
+        private MotorSettings _motorSettings;
+        
 #if UNITY_EDITOR
         [SerializeField]
         private bool _drawSkeletonGizmos = true;
@@ -27,11 +30,13 @@ namespace Corpus.Core
         
         private SkeletonService _skeletonService;
         private PhysicsService _physicsService;
+        private MotorService _motorService;
         
         public void Awake()
         {
             _skeletonService = new(_skeletonSettings);
             _physicsService = new(_physicsSettings, _skeletonService);
+            _motorService = new(_motorSettings, _physicsService);
         }
 
         public void Start()
@@ -55,8 +60,8 @@ namespace Corpus.Core
             var deltaTime = Time.fixedDeltaTime;
             
             _physicsService.FixedTick(deltaTime);
+            _motorService.FixedTick(deltaTime);
         }
-        
 
 #if UNITY_EDITOR
 
